@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infolab Serwis — Instrukcja</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3350;
+      --accent: #f97316;
+      --accent-dim: rgba(249,115,22,0.12);
+      --blue: #6c8ef7;
+      --blue-dim: rgba(108,142,247,0.12);
+      --green: #34d399;
+      --green-dim: rgba(52,211,153,0.12);
+      --red: #f87171;
+      --red-dim: rgba(248,113,113,0.12);
+      --yellow: #fbbf24;
+      --yellow-dim: rgba(251,191,36,0.12);
+      --text: #e4e6f0;
+      --text-muted: #8b8fa8;
+      --radius: 10px;
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --mono: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 15px;
+    }
+
+    /* ── Layout ── */
+    .layout { display: flex; min-height: 100vh; }
+
+    nav {
+      width: 260px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 28px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    nav .logo {
+      padding: 0 24px 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    nav .logo span {
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.3px;
+    }
+
+    nav .logo small {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    nav ul { list-style: none; padding: 0 12px; }
+    nav ul li { margin-bottom: 2px; }
+
+    nav ul li a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 7px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13.5px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    nav ul li a:hover { background: var(--surface2); color: var(--text); }
+    nav ul li a.active { background: var(--accent-dim); color: var(--accent); }
+
+    nav .section-label {
+      padding: 14px 24px 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    main {
+      flex: 1;
+      padding: 48px 56px;
+      max-width: 900px;
+    }
+
+    /* ── Typography ── */
+    h1 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    h1 span { color: var(--accent); }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 48px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: -0.3px;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 28px 0 10px;
+      color: var(--text);
+    }
+
+    p { margin-bottom: 14px; color: var(--text); }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--surface) 0%, #1c1f32 100%);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 36px 40px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(249,115,22,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero p { color: var(--text-muted); font-size: 15px; margin-bottom: 0; }
+
+    .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-orange { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(249,115,22,0.3); }
+    .badge-blue   { background: var(--blue-dim);   color: var(--blue);   border: 1px solid rgba(108,142,247,0.3); }
+    .badge-green  { background: var(--green-dim);  color: var(--green);  border: 1px solid rgba(52,211,153,0.3); }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    /* ── Grid ── */
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+    @media (max-width: 680px) { .grid2 { grid-template-columns: 1fr; } }
+
+    /* ── Steps ── */
+    .steps { counter-reset: step; }
+
+    .step {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      background: var(--accent-dim);
+      border: 2px solid rgba(249,115,22,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+
+    .step-body { flex: 1; }
+    .step-body strong { display: block; font-size: 15px; margin-bottom: 6px; }
+
+    /* ── Code blocks ── */
+    pre, code {
+      font-family: var(--mono);
+      font-size: 13px;
+    }
+
+    pre {
+      background: #0a0c14;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      overflow-x: auto;
+      margin: 12px 0 20px;
+      line-height: 1.6;
+    }
+
+    code {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+    }
+
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 13px;
+    }
+
+    .comment { color: #4d5473; }
+    .key     { color: var(--blue); }
+    .val     { color: var(--green); }
+    .cmd     { color: var(--yellow); }
+    .prompt  { color: var(--accent); user-select: none; }
+
+    /* ── Callouts ── */
+    .callout {
+      display: flex;
+      gap: 14px;
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      margin: 16px 0;
+      font-size: 14px;
+    }
+
+    .callout-icon { flex-shrink: 0; font-size: 18px; line-height: 1.4; }
+    .callout p { margin: 0; }
+
+    .callout-warn  { background: var(--yellow-dim); border: 1px solid rgba(251,191,36,0.25);  color: #f5d76e; }
+    .callout-info  { background: var(--blue-dim);   border: 1px solid rgba(108,142,247,0.25); color: #a5b8fb; }
+    .callout-ok    { background: var(--green-dim);  border: 1px solid rgba(52,211,153,0.25);  color: #6ee7b7; }
+    .callout-danger{ background: var(--red-dim);    border: 1px solid rgba(248,113,113,0.25); color: #fca5a5; }
+
+    /* ── Table ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 13.5px;
+    }
+
+    th {
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--surface2);
+      color: var(--text-muted);
+      font-size: 11.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--surface2); }
+
+    /* ── Route pills ── */
+    .route {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 13px;
+      font-family: var(--mono);
+      margin-bottom: 4px;
+    }
+
+    .method {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .get  { background: var(--blue-dim);  color: var(--blue);  }
+    .post { background: var(--green-dim); color: var(--green); }
+
+    /* ── Divider ── */
+    hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ── Sidebar ── -->
+  <nav>
+    <div class="logo">
+      <span>Infolab Serwis</span>
+      <small>Dokumentacja techniczna</small>
+    </div>
+
+    <div class="section-label">Wprowadzenie</div>
+    <ul>
+      <li><a href="#o-projekcie">📋 O projekcie</a></li>
+      <li><a href="#architektura">🏗 Architektura</a></li>
+      <li><a href="#routing">🗺 Routing</a></li>
+    </ul>
+
+    <div class="section-label">Konfiguracja</div>
+    <ul>
+      <li><a href="#wymagania">⚙️ Wymagania</a></li>
+      <li><a href="#zmienne">🔑 Zmienne środowiskowe</a></li>
+      <li><a href="#baza-danych">🗄 Baza danych</a></li>
+    </ul>
+
+    <div class="section-label">Uruchomienie</div>
+    <ul>
+      <li><a href="#lokalnie">💻 Lokalnie (dev)</a></li>
+      <li><a href="#deployment">🚀 Deployment (Vercel)</a></li>
+      <li><a href="#pierwszy-admin">👑 Pierwszy admin</a></li>
+    </ul>
+
+    <div class="section-label">Użytkowanie</div>
+    <ul>
+      <li><a href="#uzytkownicy">👥 Zarządzanie użytkownikami</a></li>
+      <li><a href="#telefony">📞 Numery telefonów</a></li>
+      <li><a href="#wyszukiwarka">🔍 Wyszukiwarka NIP</a></li>
+    </ul>
+
+    <div class="section-label">Debugowanie</div>
+    <ul>
+      <li><a href="#debug">🐛 Tryb debug</a></li>
+      <li><a href="#faq">❓ FAQ</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Main ── -->
+  <main>
+
+    <!-- ── Hero ── -->
+    <div class="hero">
+      <h1>Infolab <span>Serwis</span></h1>
+      <div class="badge-row">
+        <span class="badge badge-orange">Next.js 15</span>
+        <span class="badge badge-blue">Supabase</span>
+        <span class="badge badge-blue">Pipedrive CRM</span>
+        <span class="badge badge-green">TypeScript</span>
+        <span class="badge badge-orange">Tailwind CSS</span>
+      </div>
+      <p>Wewnętrzna wyszukiwarka firm dla handlowców. Umożliwia szybkie pobieranie danych o firmie z systemu Pipedrive CRM na podstawie numeru NIP.</p>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <h2 id="o-projekcie">📋 O projekcie</h2>
+
+    <p>Aplikacja webowa zbudowana w Next.js 15 (App Router), służy jako panel dostępu do danych CRM. Użytkownik loguje się emailem i hasłem, wpisuje NIP firmy, a system pobiera z Pipedrive wszystkie powiązane dane: dane organizacji, osoby kontaktowe, deale i opiekunów.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">🔍 Główna funkcja</div>
+        <p style="margin:0;color:var(--text-muted);font-size:14px;">Wyszukiwanie firm po NIP w systemie Pipedrive CRM. Wyniki pokazują organizację, kontakty, deale i opiekunów.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">👑 Panel administratora</div>
+        <p style="margin:0;color:var(--text-muted);font-size:14px;">Zarządzanie kontami użytkowników (role admin/user) i numerami telefonów opiekunów z CRM.</p>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <h2 id="architektura">🏗 Architektura</h2>
+
+    <table>
+      <thead>
+        <tr><th>Warstwa</th><th>Technologia</th><th>Rola</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Frontend + Backend</td>
+          <td><code>Next.js 15</code> (App Router)</td>
+          <td>SSR, Server Actions, routing</td>
+        </tr>
+        <tr>
+          <td>Autentykacja</td>
+          <td><code>Supabase Auth</code></td>
+          <td>Logowanie email/hasło, sesje, middleware</td>
+        </tr>
+        <tr>
+          <td>Baza danych</td>
+          <td><code>Supabase PostgreSQL</code></td>
+          <td>Role użytkowników, numery telefonów opiekunów</td>
+        </tr>
+        <tr>
+          <td>Dane CRM</td>
+          <td><code>Pipedrive API v1/v2</code></td>
+          <td>Organizacje, osoby, deale, pipeline</td>
+        </tr>
+        <tr>
+          <td>UI</td>
+          <td><code>shadcn/ui + Tailwind</code></td>
+          <td>Komponenty, stylowanie</td>
+        </tr>
+        <tr>
+          <td>Deployment</td>
+          <td><code>Vercel</code></td>
+          <td>Hosting, CI/CD</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ══════════════════════════════════════ -->
+    <h2 id="routing">🗺 Routing</h2>
+
+    <table>
+      <thead>
+        <tr><th>Ścieżka</th><th>Dostęp</th><th>Opis</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="route"><span class="method get">GET</span>/</span></td>
+          <td>Publiczny</td>
+          <td>Strona logowania. Zalogowani są redirectowani do <code>/dashboard</code> lub <code>/admin</code>.</td>
+        </tr>
+        <tr>
+          <td><span class="route"><span class="method get">GET</span>/dashboard</span></td>
+          <td>Zalogowany</td>
+          <td>Główny widok — formularz wyszukiwania NIP + wyniki z Pipedrive.</td>
+        </tr>
+        <tr>
+          <td><span class="route"><span class="method get">GET</span>/dashboard?nip=XXX</span></td>
+          <td>Zalogowany</td>
+          <td>Automatyczne wyszukiwanie po przejściu z parametrem NIP w URL.</td>
+        </tr>
+        <tr>
+          <td><span class="route"><span class="method get">GET</span>/admin</span></td>
+          <td>Admin tylko</td>
+          <td>Panel zarządzania użytkownikami (role).</td>
+        </tr>
+        <tr>
+          <td><span class="route"><span class="method get">GET</span>/admin/phones</span></td>
+          <td>Admin tylko</td>
+          <td>Zarządzanie numerami telefonów opiekunów z CRM.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-info">
+      <div class="callout-icon">ℹ️</div>
+      <p>Middleware w <code>middleware.ts</code> automatycznie chroni trasy — użytkownik bez sesji jest redirectowany na <code>/</code>, a zwykły użytkownik próbujący wejść na <code>/admin</code> trafia do <code>/dashboard?error=unauthorized_admin_access</code>.</p>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <h2 id="wymagania">⚙️ Wymagania</h2>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Lokalny development</div>
+        <ul style="color:var(--text-muted);font-size:14px;padding-left:18px;">
+          <li>Node.js ≥ 18</li>
+          <li>pnpm ≥ 8 (<code>npm i -g pnpm</code>)</li>
+          <li>Konto Supabase</li>
+          <li>Klucz API Pipedrive</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Produkcja (Vercel)</div>
+        <ul style="color:var(--text-muted);font-size:14px;padding-left:18px;">
+          <li>Konto Vercel (darmowy plan wystarczy)</li>
+          <li>Repozytorium GitHub / GitLab</li>
+          <li>Te same konta Supabase + Pipedrive</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <h2 id="zmienne">🔑 Zmienne środowiskowe</h2>
+
+    <p>Utwórz plik <code>.env.local</code> w katalogu głównym projektu. <strong>Nie commituj go do gita</strong> — plik jest już w <code>.gitignore</code>.</p>
+
+    <pre><code><span class="comment"># ── Supabase ────────────────────────────────────────────────────</span>
+<span class="key">NEXT_PUBLIC_SUPABASE_URL</span>=<span class="val">https://twoj-projekt.supabase.co</span>
+<span class="key">NEXT_PUBLIC_SUPABASE_ANON_KEY</span>=<span class="val">eyJhbGciOiJIUzI1NiIs...</span>
+<span class="key">SUPABASE_SERVICE_ROLE_KEY</span>=<span class="val">eyJhbGciOiJIUzI1NiIs...</span>
+
+<span class="comment"># ── Pipedrive ───────────────────────────────────────────────────</span>
+<span class="key">PIPEDRIVE_API_KEY</span>=<span class="val">twoj_klucz_api_pipedrive</span>
+
+<span class="comment"># Opcjonalne — domyślnie https://api.pipedrive.com/api</span>
+<span class="key">PIPEDRIVE_API_BASE_URL</span>=<span class="val">https://api.pipedrive.com/api</span>
+
+<span class="comment"># Opcjonalne — włącza szczegółowe logi w konsoli serwera</span>
+<span class="key">PIPEDRIVE_DEBUG</span>=<span class="val">true</span></code></pre>
+
+    <h3>Gdzie znaleźć wartości?</h3>
+
+    <table>
+      <thead>
+        <tr><th>Zmienna</th><th>Gdzie szukać</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>NEXT_PUBLIC_SUPABASE_URL</code></td>
+          <td>Supabase Dashboard → Project Settings → API → Project URL</td>
+        </tr>
+        <tr>
+          <td><code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code></td>
+          <td>Supabase Dashboard → Project Settings → API → <em>anon public</em> key</td>
+        </tr>
+        <tr>
+          <td><code>SUPABASE_SERVICE_ROLE_KEY</code></td>
+          <td>Supabase Dashboard → Project Settings → API → <em>service_role</em> key (⚠️ sekret!)</td>
+        </tr>
+        <tr>
+          <td><code>PIPEDRIVE_API_KEY</code></td>
+          <td>Pipedrive → kliknij avatar → Personal preferences → API → Your personal API token</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-danger">
+      <div class="callout-icon">🔐</div>
+      <p><strong>SUPABASE_SERVICE_ROLE_KEY</strong> omija wszystkie reguły RLS i daje pełny dostęp do bazy. Nigdy nie umieszczaj go w kodzie frontendowym ani nie ujawniaj publicznie.</p>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <h2 id="baza-danych">🗄 Baza danych (Supabase)</h2>
+
+    <p>Projekt wymaga dwóch tabel w Supabase. Skrypty SQL są w folderze <code>scripts/</code> — należy je uruchomić w kolejności numerycznej w Supabase SQL Editor.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-body">
+          <strong>Otwórz Supabase SQL Editor</strong>
+          W panelu Supabase: lewe menu → <em>SQL Editor</em> → kliknij <em>+ New query</em>.
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-body">
+          <strong>Uruchom skrypt 001 — tabela ról</strong>
+          Wklej i uruchom zawartość pliku <code>scripts/001-create-user-roles.sql</code>. Tworzy tabelę <code>user_roles</code>, polityki RLS i funkcję <code>is_current_user_admin()</code>.
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-body">
+          <strong>Uruchom skrypt 002 — auto-admin</strong>
+          Wklej i uruchom <code>scripts/002-auto-admin-first-user.sql</code>. Nadaje rolę admina pierwszemu zarejestrowanemu użytkownikowi (jeśli żaden admin jeszcze nie istnieje).
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-body">
+          <strong>Uruchom skrypt 003 — poprawki polityk RLS</strong>
+          Wklej i uruchom <code>scripts/003-fix-user-roles-policies.sql</code>. Naprawia polityki bezpieczeństwa dla tabeli ról.
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-body">
+          <strong>Uruchom skrypt 006 — tabela telefonów</strong>
+          Wklej i uruchom <code>scripts/006-create-owner-phones-table.sql</code>. Tworzy tabelę <code>owner_phone_numbers</code> do przechowywania numerów telefonów opiekunów z CRM.
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-warn">
+      <div class="callout-icon">⚠️</div>
+      <p>Skryptów <code>005-add-phone-to-users.sql</code> i <code>005-revert-phone-from-users.sql</code> <strong>nie uruchamiaj</strong> — to stare, zastąpione migracje (numer 005 był używany dwa razy). Skrypt 006 jest aktualną wersją obsługi telefonów.</p>
+    </div>
+
+    <h3>Schemat bazy</h3>
+
+    <table>
+      <thead>
+        <tr><th>Tabela</th><th>Kolumny</th><th>Opis</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>user_roles</code></td>
+          <td><code>user_id</code>, <code>role</code>, <code>created_at</code>, <code>updated_at</code></td>
+          <td>Role użytkowników (<code>admin</code> lub <code>user</code>). RLS włączone.</td>
+        </tr>
+        <tr>
+          <td><code>owner_phone_numbers</code></td>
+          <td><code>email</code>, <code>phone_number</code>, <code>created_at</code>, <code>updated_at</code></td>
+          <td>Numery telefonów opiekunów z CRM, identyfikowane emailem. RLS wyłączone (zarządzane przez admin backend).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ══════════════════════════════════════ -->
+    <h2 id="lokalnie">💻 Uruchomienie lokalne</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-body">
+          <strong>Zainstaluj zależności</strong>
+          <pre><code><span class="prompt">$ </span><span class="cmd">pnpm install</span></code></pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-body">
+          <strong>Utwórz plik <code>.env.local</code></strong>
+          Skopiuj przykład z sekcji <a href="#zmienne">Zmienne środowiskowe</a> i uzupełnij wartości.
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-body">
+          <strong>Uruchom serwer deweloperski</strong>
+          <pre><code><span class="prompt">$ </span><span class="cmd">pnpm dev</span></code></pre>
+          Aplikacja będzie dostępna pod <code>http://localhost:3000</code>.
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-body">
+          <strong>Zarejestruj pierwszego użytkownika</strong>
+          Wejdź na <code>http://localhost:3000</code> i kliknij <em>Zarejestruj się</em>. Skrypt 002 automatycznie nada mu rolę admina (jeśli żaden admin jeszcze nie istnieje).
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <h2 id="deployment">🚀 Deployment na Vercel</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-body">
+          <strong>Wgraj kod na GitHub / GitLab / Bitbucket</strong>
+          <pre><code><span class="prompt">$ </span><span class="cmd">git init && git add . && git commit -m "Initial commit"</span>
+<span class="prompt">$ </span><span class="cmd">git remote add origin https://github.com/twoja-org/infolab-serwis.git</span>
+<span class="prompt">$ </span><span class="cmd">git push -u origin main</span></code></pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-body">
+          <strong>Połącz repozytorium z Vercel</strong>
+          Zaloguj się na <a href="https://vercel.com">vercel.com</a> → <em>Add New Project</em> → wybierz repozytorium. Vercel automatycznie wykryje Next.js.
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-body">
+          <strong>Ustaw zmienne środowiskowe w Vercel</strong>
+          W kroku konfiguracji (lub później: Settings → Environment Variables) dodaj wszystkie zmienne z pliku <code>.env.local</code>:
+          <ul style="margin-top:8px;padding-left:18px;color:var(--text-muted);font-size:14px;">
+            <li><code>NEXT_PUBLIC_SUPABASE_URL</code></li>
+            <li><code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code></li>
+            <li><code>SUPABASE_SERVICE_ROLE_KEY</code></li>
+            <li><code>PIPEDRIVE_API_KEY</code></li>
+            <li><code>PIPEDRIVE_API_BASE_URL</code> (opcjonalnie)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-body">
+          <strong>Kliknij Deploy</strong>
+          Vercel zbuduje aplikację poleceniem <code>pnpm build</code> i opublikuje ją. Każdy push na <code>main</code> wyzwoli automatyczny redeploy.
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-body">
+          <strong>Skonfiguruj domenę (opcjonalnie)</strong>
+          Vercel → Settings → Domains → dodaj własną domenę. SSL jest generowany automatycznie.
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <div class="callout-icon">💡</div>
+      <p>Jeśli chcesz budować lokalnie przed push-em, użyj <code>pnpm build && pnpm start</code>. Vercel uruchamia dokładnie te same polecenia.</p>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <h2 id="pierwszy-admin">👑 Nadawanie roli administratora</h2>
+
+    <h3>Automatycznie (zalecane przy pierwszym uruchomieniu)</h3>
+    <p>Po uruchomieniu skryptu <code>002-auto-admin-first-user.sql</code> — <strong>pierwszy zarejestrowany użytkownik</strong> automatycznie otrzymuje rolę admina.</p>
+
+    <h3>Ręcznie przez SQL Editor</h3>
+    <p>Wejdź do Supabase → Authentication → Users, znajdź UUID użytkownika i uruchom:</p>
+    <pre><code><span class="cmd">INSERT INTO</span> public.user_roles (user_id, role)
+<span class="cmd">VALUES</span> (<span class="val">'uuid-uzytkownika-tutaj'</span>, <span class="val">'admin'</span>)
+<span class="cmd">ON CONFLICT</span> (user_id) <span class="cmd">DO UPDATE SET</span> role = <span class="val">'admin'</span>;</code></pre>
+
+    <h3>Przez panel admina (jeśli masz już admina)</h3>
+    <p>Zaloguj się jako admin → kliknij pomarańczowy przycisk <em>Panel Admina</em> → przy wybranym użytkowniku zmień rolę na <em>Admin</em>.</p>
+
+    <div class="callout callout-warn">
+      <div class="callout-icon">⚠️</div>
+      <p>Jeśli utracisz dostęp do konta administratora, jedynym sposobem odzyskania go jest metoda przez SQL Editor (wymaga dostępu do panelu Supabase).</p>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <h2 id="uzytkownicy">👥 Zarządzanie użytkownikami</h2>
+
+    <p>Panel dostępny pod <code>/admin</code> — tylko dla adminów.</p>
+
+    <div class="card">
+      <div class="card-title">Co możesz zrobić w panelu admin?</div>
+      <ul style="color:var(--text-muted);font-size:14px;padding-left:18px;line-height:2;">
+        <li>Przeglądać listę wszystkich zarejestrowanych użytkowników</li>
+        <li>Zmienić rolę użytkownika: <strong>Admin</strong> ↔ <strong>User</strong></li>
+        <li>Usunąć użytkownika z systemu</li>
+      </ul>
+    </div>
+
+    <div class="callout callout-info">
+      <div class="callout-icon">ℹ️</div>
+      <p>Rejestracja nowych kont odbywa się przez stronę logowania — użytkownicy sami się rejestrują (lub admin może to zrobić za nich). Nowy użytkownik domyślnie otrzymuje rolę <code>user</code>.</p>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <h2 id="telefony">📞 Numery telefonów opiekunów</h2>
+
+    <p>Panel dostępny pod <code>/admin/phones</code>.</p>
+
+    <p>System Pipedrive często nie przechowuje numerów telefonów użytkowników CRM (opiekunów). Ta funkcja pozwala adminowi ręcznie przypisać numer telefonu do emaila opiekuna — będzie on wyświetlany zamiast "Brak danych" przy wynikach wyszukiwania.</p>
+
+    <table>
+      <thead><tr><th>Operacja</th><th>Opis</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Dodaj telefon</td>
+          <td>Podaj email opiekuna z Pipedrive i jego numer telefonu</td>
+        </tr>
+        <tr>
+          <td>Edytuj telefon</td>
+          <td>Zmień istniejący numer dla danego emaila</td>
+        </tr>
+        <tr>
+          <td>Usuń telefon</td>
+          <td>Usuwa wpis — przy wyszukiwaniu znów pojawi się "Brak danych"</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ══════════════════════════════════════ -->
+    <h2 id="wyszukiwarka">🔍 Jak działa wyszukiwarka NIP</h2>
+
+    <p>Wpisz NIP firmy (bez kresek) i kliknij <em>Wyszukaj</em>. System wykona następujące kroki:</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-body">
+          <strong>Wyszukanie organizacji</strong>
+          Zapytanie do Pipedrive API <code>/v1/organizations/search</code> z parametrem <code>term=NIP</code> i <code>exact_match=1</code>.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-body">
+          <strong>Pobranie osób kontaktowych</strong>
+          Dla każdej organizacji pobiera listę osób (<code>/v1/organizations/{id}/persons</code>).
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-body">
+          <strong>Pobranie dealów</strong>
+          Zapytanie do <code>/v2/deals?org_id={id}</code> — zwraca wszystkie deale powiązane z organizacją.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-body">
+          <strong>Pobranie opiekunów</strong>
+          Dla każdego dealu i organizacji pobiera dane opiekuna (<code>/v1/users/{id}</code>), a numer telefonu nadpisuje danymi z tabeli <code>owner_phone_numbers</code>.
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-warn">
+      <div class="callout-icon">⏱</div>
+      <p>Wyszukiwanie może trwać kilka sekund — API Pipedrive wykonuje wiele kolejnych zapytań (osoby, deale, pipeline, opiekunowie). To normalne zachowanie.</p>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <h2 id="debug">🐛 Tryb debug (Pipedrive)</h2>
+
+    <p>Ustaw zmienną <code>PIPEDRIVE_DEBUG=true</code> w <code>.env.local</code>, aby włączyć szczegółowe logowanie w konsoli serwera Next.js. Logi pokazują:</p>
+
+    <ul style="padding-left:20px;color:var(--text-muted);font-size:14px;line-height:2.2;">
+      <li>Każde zapytanie HTTP do Pipedrive (URL bez klucza API, czas odpowiedzi)</li>
+      <li>Status i nagłówki odpowiedzi</li>
+      <li>Przetworzone dane (organizacje, osoby, deale)</li>
+      <li>Ostrzeżenia (brak pipeline, brak stage, itp.)</li>
+    </ul>
+
+    <div class="callout callout-danger">
+      <div class="callout-icon">🚫</div>
+      <p><strong>Nigdy nie włączaj <code>PIPEDRIVE_DEBUG=true</code> na produkcji.</strong> Logi mogą zawierać wrażliwe dane biznesowe i spowalniają odpowiedzi serwera.</p>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <h2 id="faq">❓ FAQ</h2>
+
+    <h3>Nie mogę się zalogować — "Invalid login credentials"</h3>
+    <p>Sprawdź czy użytkownik istnieje w Supabase Dashboard → Authentication → Users. Jeśli nie — zarejestruj konto przez stronę logowania.</p>
+
+    <h3>Po zalogowaniu widzę dashboard, ale wyszukiwanie nie działa</h3>
+    <p>Sprawdź zmienną <code>PIPEDRIVE_API_KEY</code> — czy jest ustawiona i czy nie zawiera placeholdera. Włącz <code>PIPEDRIVE_DEBUG=true</code> i sprawdź logi w terminalu.</p>
+
+    <h3>Strona /admin przekierowuje mnie na dashboard</h3>
+    <p>Twoje konto nie ma roli <code>admin</code>. Sprawdź tabelę <code>user_roles</code> w Supabase lub nadaj rolę ręcznie przez SQL Editor (patrz sekcja <a href="#pierwszy-admin">Pierwszy admin</a>).</p>
+
+    <h3>Build na Vercel kończy się błędem TypeScript</h3>
+    <p>Uruchom lokalnie <code>pnpm build</code> — zobaczysz dokładny błąd. Najczęstsza przyczyna to brakujące zmienne środowiskowe podczas buildu.</p>
+
+    <h3>Pipedrive zwraca "Brak danych" przy telefonie opiekuna</h3>
+    <p>To normalne — Pipedrive często nie przechowuje telefonów użytkowników CRM. Dodaj numer ręcznie w panelu <code>/admin/phones</code>.</p>
+
+    <h3>Jak dodać nowego użytkownika bez dostępu do panelu admin?</h3>
+    <p>Użytkownik może się sam zarejestrować na stronie logowania (<code>/</code> → kliknij link rejestracji). Domyślnie dostaje rolę <code>user</code>.</p>
+
+    <hr>
+
+    <footer>
+      <p>Dokumentacja wygenerowana dla projektu <strong>Infolab Serwis</strong> · Next.js 15 + Supabase + Pipedrive CRM</p>
+    </footer>
+
+  </main>
+</div>
+
+</body>
+</html>
